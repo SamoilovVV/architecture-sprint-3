@@ -1,0 +1,29 @@
+@startuml
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+System_Boundary(c1, "Уведомления") {
+  Component(controller, "Controller", "Java","Принимает и обрабатывает сообщения")
+
+  Component(controller_sms, "Sms sender", "Java","Отвечает за интеграцию с сервисом отправки SMS")
+  Component(controller_mail, "Mail sender", "Java","Отвечает за интеграцию с сервисом отправки email")
+  Component(controller_push, "Push sender", "Java","Отвечает за интеграцию с сервисом отправки push уведомлений")
+  
+}
+
+ContainerQueue(notification_queue, "Notification Queue", "Kafka", "Очередь уведомлений")
+Container_Ext(notification_sms, "Отправка SMS", "Сервис отправки уведомлений sms")
+Container_Ext(notification_mail, "Отправка  Mail", "Сервис отправки уведомлений email")
+Container_Ext(notification_push, "Отправка  push", "Firebase")
+
+
+Rel(notification_queue, controller, "Запрос на отправку уведомлений", "")
+
+Rel(controller_sms, notification_sms, "Отправка SMS", "HTTPS")
+Rel(controller_mail, notification_mail, "Отправка email", "HTTPS")
+Rel(controller_push, notification_push, "Отправка push уведомлений", "HTTPS")
+Rel(controller, controller_sms, "Запуск задачи на отправку", "")
+Rel(controller, controller_mail, "Запуск задачи на отправку", "")
+Rel(controller, controller_push, "Запуск задачи на отправку", "")
+
+@enduml

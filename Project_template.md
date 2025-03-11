@@ -63,10 +63,21 @@
 **Диаграмма контейнеров (Containers)**
 
 [Диаграмма контейнеров](doc/task2_container_diagram.puml)
+![Диаграмма контейнеров](doc/task2_container_diagram.png)
 
 **Диаграмма компонентов (Components)**
 
-Добавьте диаграмму для каждого из выделенных микросервисов.
+[Авторизация и аутентификация](doc/task2_component_diagram_auth.puml)
+![Авторизация и аутентификация](doc/task2_component_diagram_auth.png)
+
+[Управление уведомлениями](doc/task2_component_diagram_notifications.puml)
+![Управление уведомлениями](doc/task2_component_diagram_notifications.png)
+
+[Управление устройствами](doc/task2_component_diagram_management_system.puml)
+![Управление устройствами](doc/task2_component_diagram_management_system.png)
+
+[Управление конфигурациями](doc/task2_component_diagram_configuration_system.puml)
+![Управление конфигурациями](doc/task2_component_diagram_configuration_system.png)
 
 **Диаграмма кода (Code)**
 
