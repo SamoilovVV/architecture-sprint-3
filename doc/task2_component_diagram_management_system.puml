@@ -1,0 +1,41 @@
+@startuml TOBE_Component_ControlSystem
+
+title Диаграмма компонентов "Управление устройствами"
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_TOP_DOWN()
+
+Container(APIGW, "API GW", "Nginx")
+ContainerQueue(CommandsQueue, "Commands Queue", "Kafka", "Очередь команд")
+ContainerQueue(SensorsQueue, "Sensors Queue", "Kafka", "Очередь сообщений от датчиов")
+ContainerQueue(NotificationQueue, "Notification Queue", "Kafka", "Очередь уведомлений")
+
+System_Ext(device, "Устройство умного дома")
+System_Ext(sensor, "Датчик умного дома")
+
+
+Container_Boundary(ControlSystem, "Система управления") {
+    Component(DevicesController, "Devices Controller", "Java", "Обработка команд")
+    Component(DevicesRepository, "Devices Repository", "Java", "Cоздание, удаление устройств и датчиков")
+    Component(PropertiesController, "Properties Controller", "Java", "Управление параметрами устройств")
+    ComponentDb(DevicesDB, "DevicesDB", "MongoDB", "Хранение состояния устройств")
+}
+
+BiRel(DevicesController, DevicesRepository, "https")
+BiRel(DevicesController, PropertiesController, "https")
+BiRel(APIGW, DevicesController, "https")
+
+Rel(DevicesRepository, device, "")
+Rel(DevicesRepository, sensor, "")
+Rel(PropertiesController, device, "")
+Rel(device, SensorsQueue, "")
+Rel(sensor, SensorsQueue, "")
+
+Rel_L(CommandsQueue, DevicesController, "Получение команд из очереди")
+Rel_L(SensorsQueue, DevicesController, "Отслеживание изменения состояния устройств и датчиков")
+Rel_L(DevicesController, NotificationQueue, "Уведомления о событиях изменения параметров и состава устройств и датчиков")
+
+BiRel(DevicesRepository, DevicesDB, "")
+BiRel(PropertiesController, DevicesDB, "")
+
+@enduml

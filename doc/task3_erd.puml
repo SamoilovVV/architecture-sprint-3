@@ -1,0 +1,74 @@
+@startuml TOBE_ERD
+title Диаграмма ER
+
+entity "Пользователь" as User {
+    * id : UUID
+    --
+    * name: string
+    * email : string
+    * password_hash : string
+    * balance: float
+}
+
+entity "Дом" as House {
+    * id : UUID
+    --
+    * name: string
+    addr: string
+}
+
+entity "Тип устройства" as DeviceType {
+    * id : int
+    --
+    * type: string
+    * name: string
+}
+
+entity "Устройство" as Device {
+    * id : UUID
+    --
+    name: string
+    * type_id: int
+    * house_id : UUID
+    * ip: string
+    serial_number: string
+    properties: json
+    status: bool
+}
+
+
+entity "Тип датчика" as SensorType {
+    * id : int
+    --
+    * type: string
+    * name: string
+}
+
+entity "Датчик" as Sensor {
+    * id : UUID
+    --
+    name: string
+    serial_number: string
+    * type_id: int
+    * device_id : UUID
+    serial: string
+}
+
+entity TelemetryData {
+    * id : UUID
+    --
+    * timestamp : date
+    * device_id : UUID
+    telemetry: json
+}
+
+User }|..o{ House: own
+House ||..o{ Device: contain
+Device }o..|| DeviceType: type of
+House ||..o{ Sensor: contain
+Sensor }o..|| SensorType: type of
+Device ||..|{ Sensor: consist of
+Device ||..o{ TelemetryData: produce
+Sensor ||..o{ TelemetryData: produce
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+System_Boundary(c1, "Авторизация и аутентификция") {
+  Component(sign_in, "Sign In", "Java","Авторизует пользователя")
+  Component(security, "Security", "Spring bean", "Проверка токена")
+  Component(sign_on, "Sign On", "Java", "Регистрирует пользователя")
+  Component(UserProfile, "UserProfile", "Java", "Профиль пользователя")
+  ContainerDb(users_db, "Postgres", "Relational Database", "Хранение данных о пользователе")
+}
+
+ContainerQueue(NotificationQueue, "Notification Queue", "Kafka", "Очередь уведомлений")
+
+Rel(sign_in, security, "Проверка на безопасность", "")
+Rel(sign_on, security, "Проверка на безопасность", "")
+Rel(security, UserProfile,"")
+
+BiRel(UserProfile, users_db, "Редактирование профиля пользователя", "")
+Rel(sign_on, NotificationQueue, "Регистрация", "")
+Rel(sign_in, NotificationQueue, "Уведомление о входе", "")
+
+Rel(security, users_db, "Авторизация", "")
+
+@enduml

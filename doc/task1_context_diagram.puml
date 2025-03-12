@@ -1,0 +1,13 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "User")
+
+System(service, "Система управления отоплением")
+System_Ext(device, "Устройство отопления")
+System_Ext(sensor, "Датчик температуры")
+
+Rel(user, service, "Просмотр и изменение параметров системы")
+Rel(service, device, "Включение/выключение отопления, установка температуры", "HTTP")
+Rel(service, sensor, "Получение данных о температуре", "HTTP")
+@enduml

@@ -1,0 +1,39 @@
+@startuml TOBE_Component_ControlSystem
+title Диаграмма компонентов "Конфигурирование устройств"
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_TOP_DOWN()
+
+
+Container(APIGW, "API GW", "Nginx")
+Container(DevicesRepository, "Devices Repository", "Java")
+ContainerQueue(NotificationQueue, "Notification Queue", "Kafka", "Очередь уведомлений")
+ContainerQueue(CommandsQueue, "Commands Queue", "Kafka", "Очередь для всех внутренних событий системы")
+ContainerQueue(SensorsQueue, "Sensors Queue", "Kafka", "Очередь сообщений от датчиков")
+
+Container_Boundary(ControlSystem, "Система управления") {
+    Component(ScenarioController, "Scenario Controller", "Java", "Управление сценариями системы")
+    Component(ConfigurationManagement, "Configuration Management", "Java", "Конфигурация системы")
+    ComponentDb(ConfigurationDB, "Configuration DB", "MongoDB + Redis", "Хранение топологии, параметров, сценариев системы")
+    Component(TaskScheduler, "Task Scheduler", "Cron", "Отправка команд на устройства в соответсвие с расписанием")
+}
+
+BiRel(APIGW, ScenarioController, "http")
+
+BiRel(ScenarioController, ConfigurationManagement, "сценарии")
+
+
+BiRel(ConfigurationManagement, ConfigurationDB, "")
+
+Rel_L(DevicesRepository, ConfigurationManagement, "Получение данных об устройствах")
+Rel_L(SensorsQueue, ConfigurationManagement, "Отслеживание изменения состояния датчиков")
+Rel(ConfigurationManagement, NotificationQueue, "Уведомления об изменении и проблемах с конфигурациями")
+
+
+
+Rel(ConfigurationManagement, TaskScheduler, "изменение расписания")
+Rel(ConfigurationDB, TaskScheduler, "расписание")
+
+Rel(TaskScheduler, CommandsQueue, "Запуск команд в соответсвие с пользовательскими сценариями")
+
+@enduml

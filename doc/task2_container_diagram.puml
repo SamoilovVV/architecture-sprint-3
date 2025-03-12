@@ -1,0 +1,86 @@
+@startuml
+!include <C4/C4_Container>
+
+Person(user, "User")
+
+Container(web_app, "Web App", "React.js", "Веб-приложение")
+Container(mobile_app, "Mobile App", "Jetpack Compose", "Мобильное приложение")
+
+Container(apigw, "API GateWay", "Java")
+
+System_Boundary(c1, "Управление устройствами") {
+    Container(device_controller, "Контроллер устройств", "Java", "Управляет устройствами")
+    ContainerDb(devices_db, "Postgres", "Relational Database", "Хранение данных об устройствах")
+}
+System_Boundary(monitoring, "Мониторинг устройств") {
+  Container(monitoring_component, "Monitoring Component", "java", "Обрабатывает данные с устройств и датчиков")
+  ContainerDb(monitoring_db, "Monitoring Database", "MongoDB", "{Хранит все изменения с датчиков")
+}
+System_Boundary(configuration, "Конфигурирование устройств") {
+  Container(configuration_component, "Configuration Component", "java", "Позволяет конфигурировать взаимодействие устройств в умном доме")
+  Container(task_scheduler, "Task Scheduler", "java", "Отправка команд на устройства в соответствии с пользовательскими сценариями")
+  ContainerDb(configuration_db, "Configuration Database", "Postgres", "Хранение данных о конфигурациях умного дома")
+}
+System_Boundary(notification, "Управление уведомлениями") {
+  Container(notification_component, "Notification Component", "java", "Позволяет отправлять уведомления push, email, sms")
+}
+System_Boundary(auth, "Авторизация и аутентификация") {
+  Container(auth_component, "Аuth Component", "Oauth", "Авторизует пользователя и обрабатывает доступы")
+  Container(user_profile_component, "UserProfile Component", "Управление данными пользователя")
+  ContainerDb(users_db,"Postgres", "Relational Database", "Хранит данные о пользователях")
+}
+
+System_Boundary(message_broker, "Message Broker") {
+  Container(kafka, "Kafka", "Брокер сообщений")
+}
+
+System_Ext(device, "Устройство умного дома")
+System_Ext(sensor, "Датчик умного дома")
+System_Ext(email_service, "Внешний сервис email-рассылки")
+System_Ext(sms_service, "Внешний сервис отправки sms")
+System_Ext(push_service, "Внешний серви отправки push-уведомлений")
+
+Rel(user, web_app, "")
+Rel(user, mobile_app, "")
+
+Rel(device, kafka, "Отправка данных с устройства", "HTTPS")
+Rel(sensor, kafka, "Отправка данных с датчика", "HTTPS")
+Rel(kafka, apigw, "Отправка обновлений")
+Rel(apigw, kafka, "Получение обновлений")
+Rel(web_app, apigw, "Управление устройствами, получение телеметрии, регистрация устройств", "HTTPS")
+Rel(mobile_app, apigw, "Управление устройствами, получение телеметрии, регистрация устройств", "HTTPS")
+
+Rel(device_controller, device, "Добавление нового устройства")
+Rel(device_controller, sensor, "Добавление нового датчика")
+Rel(kafka, device_controller, "Управление устройствами и датчиками")
+Rel(kafka, monitoring_component, "Получение сообщений от устройств и датчиков")
+Rel(monitoring_component, kafka, "Получение данных мониторинга")
+Rel(device_controller, kafka, "Сообщения от устройств")
+Rel(apigw, auth_component, "Авторизация")
+Rel(apigw, user_profile_component, "Управление профилем пользователя")
+
+Rel(apigw, configuration_component, "Управление и добавление новой конфигурации")
+Rel(configuration_component, configuration_db, "Сохранение и получение данных")
+Rel(configuration_component, device_controller, "Получение данных об устройствах и датчиках")
+Rel(task_scheduler, configuration_db, "Сохранение и получение данных")
+Rel(task_scheduler, kafka, "Отправляет команды на выполнение")_
+
+
+Rel(auth_component, users_db, "Авторизация")
+Rel(user_profile_component, users_db, "Изменение данных пользователя")
+
+Rel(notification_component, email_service, "Отправляет письмо")
+Rel(notification_component, sms_service, "Отправляет смс")
+Rel(notification_component, push_service, "Отправляет push-уведомление")
+
+Rel(device_controller, devices_db, "Изменение состояний устройств")
+Rel(kafka, device, "Изменение состояния устройства", "HTTPS")
+Rel(kafka, sensor, "Вкл/выкл датчика, получение текущих показаний", "HTTPS")
+
+Rel(monitoring_component, monitoring_db, "Сохранение данных")
+
+
+Rel(notification, web_app, "Отправка уведомлений", "HTTPS")
+Rel(notification, user, "Отправка уведомлений")
+
+@enduml
