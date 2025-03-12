@@ -67,34 +67,29 @@
 
 **Диаграмма компонентов (Components)**
 
-[Авторизация и аутентификация](doc/task2_component_diagram_auth.puml)
-![Авторизация и аутентификация](doc/task2_component_diagram_auth.png)
+[Управление устройствами](doc/task2_component_diagram_management_system.puml)
+![Управление устройствами](doc/task2_component_diagram_management_system.png)
+
+[Конфигурирование устройств](doc/task2_component_diagram_configuration_system.puml)
+![Конфигурирование устройств](doc/task2_component_diagram_configuration_system.png)
 
 [Управление уведомлениями](doc/task2_component_diagram_notifications.puml)
 ![Управление уведомлениями](doc/task2_component_diagram_notifications.png)
 
-[Управление устройствами](doc/task2_component_diagram_management_system.puml)
-![Управление устройствами](doc/task2_component_diagram_management_system.png)
-
-[Управление конфигурациями](doc/task2_component_diagram_configuration_system.puml)
-![Управление конфигурациями](doc/task2_component_diagram_configuration_system.png)
+[Авторизация и аутентификация](doc/task2_component_diagram_auth.puml)
+![Авторизация и аутентификация](doc/task2_component_diagram_auth.png)
 
 **Диаграмма кода (Code)**
 
-Добавьте одну диаграмму или несколько.
+[Диаграма кода Devices Repository](doc/task2_code_diagram.puml)
+![Диаграма кода Devices Repository](doc/task2_code_diagram.png)
 
 # Задание 3. Разработка ER-диаграммы
 
 [ER-диаграмма](doc/task3_erd.puml)
+![ER-диаграмма](doc/task3_erd.png)
 
-
-Четвёртое задание — дополнительное. Его можно сделать по желанию. Чтобы ревьюер быстрее проверил ваше решение, укажите, сделали вы это задание или нет. Для этого оставьте нужный эмодзи около заголовка задания:
-
-✅ — вы выполнили задание.
-
-❌ — вы пропустили задание.
-
-# ✅ ❌ Задание 4. Создание и документирование API
+# ❌ Задание 4. Создание и документирование API
 
 ### 1. Тип API
 

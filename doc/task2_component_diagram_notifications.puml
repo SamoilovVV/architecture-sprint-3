@@ -2,7 +2,7 @@
 !include <C4/C4_Container>
 !include <C4/C4_Component>
 
-System_Boundary(c1, "Уведомления") {
+System_Boundary(c1, "Управление уведомлениями") {
   Component(controller, "Controller", "Java","Принимает и обрабатывает сообщения")
 
   Component(controller_sms, "Sms sender", "Java","Отвечает за интеграцию с сервисом отправки SMS")
